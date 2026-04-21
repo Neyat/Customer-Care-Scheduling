@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Solutions — Team Hub</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f7f7f5;
+  --card: #ffffff;
+  --border: #e5e5e0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #4f46e5;
+  --accent-soft: #eef2ff;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --ok: #10b981;
+}
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px; line-height: 1.45; }
+
+/* Header */
+header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: white; padding: 18px 28px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+header .brand { display:flex; align-items:center; gap:14px; }
+header .brand .logo { width:42px; height:42px; border-radius:10px; background: #4f46e5; display:grid; place-items:center; font-size:22px; }
+header h1 { font-size: 18px; margin:0; font-weight: 600; letter-spacing:-0.01em; }
+header .sub { color: #94a3b8; font-size: 12px; margin-top:2px; }
+header .actions { display:flex; gap:8px; flex-wrap: wrap; }
+header button { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; padding: 7px 12px; font-size: 12px; cursor: pointer; font-family: inherit; }
+header button:hover { background: rgba(255,255,255,0.15); }
+header button.primary { background: var(--accent); border-color: var(--accent); }
+
+/* Nav tabs */
+nav { background: white; border-bottom: 1px solid var(--border); padding: 0 28px; display:flex; gap:4px; overflow-x:auto; }
+nav .tab { padding: 12px 16px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
+  font-size: 13px; font-weight: 500; white-space: nowrap; user-select: none; display:flex; align-items:center; gap:6px; }
+nav .tab:hover { color: var(--text); }
+nav .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+main { padding: 24px 28px; max-width: 1500px; margin: 0 auto; }
+
+/* Cards */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.card h2 { font-size: 14px; margin: 0 0 12px; font-weight:600; color: var(--text); display:flex; align-items:center; gap:8px; }
+.muted { color: var(--muted); font-size: 12px; }
+
+/* Banner (daily briefing) */
+.banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px;
+}
+.banner .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #94a3b8; margin-bottom: 6px; }
+.banner h2 { font-size: 22px; font-weight: 600; margin: 0; color: white; }
+.banner .chips { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+.chip.green { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.35); }
+.chip.red { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
+.chip.amber { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.35); }
+.chip.blue { background: rgba(79,70,229,0.25); color: #c7d2fe; border: 1px solid rgba(79,70,229,0.45); }
+
+.stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.stat-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+.stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+.stat-card .value { font-size: 26px; font-weight: 600; }
+.stat-card .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.stat-card.primary { background: #f0fdfa; border-color: #a7f3d0; }
+
+/* 2-column grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px){ .grid-2 { grid-template-columns: 1fr; } }
+
+/* Lists */
+.agent-list { display: flex; flex-direction: column; }
+.agent-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 4px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+.agent-row:last-child { border-bottom: none; }
+.agent-row .name { font-weight: 500; }
+.agent-row .time { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.agent-row .time .shift-start { color: #dc2626; margin-right: 6px; }
+.agent-row .time .shift-end { color: var(--muted); }
+
+.pto-pill { display:inline-block; background: #fef3c7; color: #92400e; border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 500; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+th { background: #fafaf7; font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; user-select: none; }
+th:hover { background: #f2f2ec; }
+
+/* Heatmap */
+.heatmap { width: 100%; border-collapse: collapse; font-size: 11px; }
+.heatmap th { padding: 8px 4px; text-align: center; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); background: #fafaf7; border-bottom: 1px solid var(--border); }
+.heatmap th.day-head { line-height: 1.2; }
+.heatmap th.day-head .date { font-size: 10px; color: var(--muted); text-transform: none; font-weight: 400; }
+.heatmap td { padding: 4px 6px; text-align: center; font-weight: 500; font-variant-numeric: tabular-nums; font-size: 12px; border-bottom: 1px solid #f8fafc; }
+.heatmap td.tl { text-align: left; color: var(--muted); font-weight: 500; font-size: 11px; }
+.heatmap td.z0 { background: #ffffff; color: #cbd5e1; }
+
+/* Supervisor chips */
+.sup-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 14px; }
+.sup-chip { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid; background: white; }
+.sup-chip.active { color: white !important; }
+.sup-count { font-size: 11px; opacity: 0.85; margin-left: 4px; }
+
+.filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.filter-row input, .filter-row select { font-size: 13px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: white; font-family: inherit; }
+.filter-row button { font-size: 12px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; cursor: pointer; font-family: inherit; }
+.filter-row button:hover { background: #f8fafc; }
+.filter-row button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+.filter-row button.primary:hover { background: #4338ca; }
+.filter-row button.danger { background: var(--danger); color: white; border-color: var(--danger); }
+
+/* Schedule pills */
+.day-pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 3px 10px; font-size: 11px; min-width: 36px; font-weight: 500; }
+.day-pill.working { background: #dbeafe; color: #1e40af; }
+.day-pill.off { background: #f1f5f9; color: #94a3b8; }
+.day-pill.wfh { background: #d1fae5; color: #065f46; }
+.day-pill.pto { background: #fef3c7; color: #92400e; }
+.day-pill.half { background: #fed7aa; color: #9a3412; }
+
+.mini-day-head { font-size: 10px; color: var(--muted); font-weight: 400; line-height: 1.2; }
+
+/* Week totals */
+.week-totals { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 16px; }
+.week-totals .wt { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
+.week-totals .wt .d { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.week-totals .wt .v { font-size: 22px; font-weight: 600; }
+.week-totals .wt .o { font-size: 10px; color: var(--danger); }
+
+/* Modal */
+.modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,0.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+.modal-bg.open { display: flex; }
+.modal { background: white; border-radius: 12px; padding: 20px 22px; max-width: 520px; width: 100%; max-height: 85vh; overflow-y: auto; }
+.modal h3 { margin: 0 0 14px; font-size: 16px; }
+.modal label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; margin-top: 10px; font-weight: 500; }
+.modal input, .modal select, .modal textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; }
+.modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.modal .day-select { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.modal .day-select label { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 11px; margin: 0; }
+.modal .day-select input { width: auto; margin-top: 4px; }
+
+button { font-family: inherit; }
+
+/* Utility */
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.space-between { justify-content: space-between; }
+.small { font-size: 11px; color: var(--muted); }
+.edit-link { color: var(--accent); font-size: 11px; cursor: pointer; }
+.edit-link:hover { text-decoration: underline; }
+
+/* Status pills for time off */
+.status-approved { color: #059669; font-weight: 500; }
+.status-pending { color: #b45309; font-weight: 500; }
+.row-pending { background: #fffbeb; }
+
+section { display: none; }
+section.active { display: block; }
+
+.info-card { background: #eef2ff; border: 1px solid #c7d2fe; color: #3730a3; padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-bottom: 14px; }
+.info-card b { color: #1e1b4b; }
+
+.hint { background: #fef9c3; border: 1px solid #fde047; color: #713f12; padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">&#128197;</div>
+    <div>
+      <h1>Customer Solutions &mdash; Team Hub</h1>
+      <div class="sub" id="subtitle">Loading&hellip;</div>
+    </div>
+  </div>
+  <div class="actions">
+    <label class="small" style="color:#94a3b8; align-self:center; margin-right:4px;">Editing as:</label>
+    <select id="role-picker" onchange="setRole(this.value)" style="background:rgba(255,255,255,0.08); color:white; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:7px 10px; font-size:12px; font-family:inherit;">
+      <option value="">View only</option>
+    </select>
+    <button onclick="exportJSON()">&#11123; Export JSON</button>
+    <button onclick="document.getElementById('import-file').click()" class="edit-only">&#11121; Import JSON</button>
+    <input type="file" id="import-file" accept="application/json" style="display:none" onchange="importJSON(event)">
+    <button onclick="resetData()" class="edit-only">Reset</button>
+  </div>
+</header>
+
+<nav>
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="today">Today</div>
+  <div class="tab" data-tab="schedule">Schedule</div>
+  <div class="tab" data-tab="timeoff">Time Off</div>
+  <div class="tab" data-tab="roster">Roster</div>
+  <div class="tab" data-tab="guide">Guide</div>
+</nav>
+
+<main>
+
+<section id="overview" class="active">
+  <div class="info-card"><b id="role-banner">View only.</b> Any supervisor (Shelby, Neyat, Alex, Lauren, Angy) can pick their name from the "Editing as" dropdown in the top right to unlock edits. Use <b>Export JSON</b> to share updated state with the team.</div>
+  <div class="card" style="margin-bottom:16px;">
+    <h2>&#128200; Total Staffed &mdash; hour-by-hour heatmap</h2>
+    <div class="muted" style="margin-bottom:8px;">Number of agents scheduled to be working at each half-hour block.</div>
+    <div id="overview-total"></div>
+  </div>
+  <div class="card">
+    <h2>&#128181; In-Office Coverage <span class="chip red" id="in-office-alert" style="display:none;">over limit</span></h2>
+    <div class="muted" style="margin-bottom:8px;">In-office headcount by half-hour (assumes everyone is in-office; adjust if WFH toggles are added).</div>
+    <div id="overview-inoffice"></div>
+  </div>
+</section>
+
+<section id="today">
+  <div class="banner">
+    <div class="eyebrow">Daily Briefing</div>
+    <h2 id="today-date">&mdash;</h2>
+    <div class="muted" style="color:#94a3b8; margin-top:4px;" id="today-active">&mdash; active agents</div>
+    <div class="chips">
+      <span class="chip green" id="today-coverage-chip">&#9989; Staffing OK</span>
+      <span class="chip blue" id="today-coverage-pct">&mdash; coverage</span>
+    </div>
+  </div>
+
+  <div class="stat-cards">
+    <div class="stat-card"><div class="label">Working</div><div class="value" id="stat-working">&mdash;</div><div class="sub" id="stat-working-sub"></div></div>
+    <div class="stat-card primary"><div class="label">In Office</div><div class="value" id="stat-inoffice">&mdash;</div></div>
+    <div class="stat-card"><div class="label">WFH</div><div class="value" id="stat-wfh">&mdash;</div></div>
+    <div class="stat-card"><div class="label">Out / PTO</div><div class="value" id="stat-out">&mdash;</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>&#128196; Out Today</h2>
+      <div class="agent-list" id="out-list"></div>
+    </div>
+    <div class="card">
+      <h2>&#127970; In Office <span class="muted" id="in-office-count"></span></h2>
+      <div class="agent-list" id="in-list"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h2>&#9888;&#65039; Risks &amp; Alerts</h2>
+    <div id="risk-list"></div>
+  </div>
+
+</section>
+
+<section id="schedule">
+  <div class="card">
+    <div class="row space-between" style="margin-bottom:12px;">
+      <h2 style="margin:0;">Weekly Schedule</h2>
+      <div class="row">
+        <span class="small">Click any day cell to change status</span>
+      </div>
+    </div>
+
+    <div class="week-totals" id="week-totals"></div>
+
+    <div class="small" style="margin-bottom:6px; color: var(--muted);">Filter by supervisor</div>
+    <div class="sup-chips" id="sup-chips"></div>
+
+    <div class="filter-row">
+      <input type="text" id="sched-search" placeholder="Search agent&hellip;" oninput="renderSchedule()">
+      <span style="flex:1"></span>
+      <button class="primary edit-only" onclick="openAgentModal()">+ Add Agent</button>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table id="sched-table">
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Shift</th>
+            <th>Supervisor</th>
+            <th class="mini-day-head">Sun</th>
+            <th class="mini-day-head">Mon</th>
+            <th class="mini-day-head">Tue</th>
+            <th class="mini-day-head">Wed</th>
+            <th class="mini-day-head">Thu</th>
+            <th class="mini-day-head">Fri</th>
+            <th class="mini-day-head">Sat</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="sched-body"></tbody>
+      </table>
+    </div>
+    <div class="small" id="sched-footer" style="margin-top:10px;"></div>
+  </div>
+</section>
+
+<section id="timeoff">
+  <div class="card">
+    <div class="row space-between" style="margin-bottom:12px;">
+      <h2 style="margin:0;">Time Off Requests</h2>
+      <button class="primary edit-only" onclick="openTimeOffModal()">+ Add Request</button>
+    </div>
+
+    <div class="filter-row">
+      <select id="tf-month" onchange="renderTimeOff()">
+        <option value="">All Months</option>
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+      <select id="tf-sup" onchange="renderTimeOff()">
+        <option value="">All Supervisors</option>
+      </select>
+      <select id="tf-type" onchange="renderTimeOff()">
+        <option value="">All Types</option>
+        <option value="Vacation">Vacation</option>
+        <option value="Jiffy">Jiffy</option>
+        <option value="Half Jiffy">Half Jiffy</option>
+        <option value="Parental">Parental</option>
+        <option value="Unpaid">Unpaid</option>
+      </select>
+      <input type="text" id="tf-search" placeholder="Search&hellip;" oninput="renderTimeOff()">
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Type</th>
+            <th>Dates</th>
+            <th>Days</th>
+            <th>Status</th>
+            <th>Supervisor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="timeoff-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="roster">
+  <div class="card">
+    <div class="row space-between" style="margin-bottom:12px;">
+      <h2 style="margin:0;">Full Roster</h2>
+      <button class="primary edit-only" onclick="openAgentModal()">+ Add Agent</button>
+    </div>
+    <div class="filter-row">
+      <input type="text" id="roster-search" placeholder="Search agent&hellip;" oninput="renderRoster()">
+      <select id="roster-sup" onchange="renderRoster()">
+        <option value="">All Supervisors</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Shift</th>
+            <th>Supervisor</th>
+            <th>Days</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="roster-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="guide">
+  <div class="card">
+    <h2>&#128214; Guide &mdash; Editing the Team Hub</h2>
+    <p>This hub is <b>open to the whole team</b>. Anyone can make changes &mdash; no manager login required.</p>
+    <h3>How changes work</h3>
+    <ul>
+      <li><b>Edits are local.</b> When you edit the schedule, roster, or time off, changes save to your browser (localStorage) so they persist when you refresh.</li>
+      <li><b>To share changes with the team,</b> click <b>Export JSON</b> (top right) and share the file (Slack, email, or commit it to the repo as <code>data.json</code>).</li>
+      <li><b>To load someone else&#39;s changes,</b> click <b>Import JSON</b> and pick their file.</li>
+      <li><b>To start fresh,</b> click <b>Reset to default</b>.</li>
+    </ul>
+    <h3>Editing the schedule</h3>
+    <ul>
+      <li>Click any day cell on the <b>Schedule</b> tab to cycle through: Off &rarr; Working &rarr; WFH &rarr; PTO &rarr; Half day.</li>
+      <li>Click <b>+ Add Agent</b> to add a new team member. Click the &#9998; pencil icon to edit or &#128465; trash to remove.</li>
+    </ul>
+    <h3>Time off</h3>
+    <ul>
+      <li>Click <b>+ Add Request</b> on the Time Off tab to log vacation / Jiffy day / etc.</li>
+      <li>Filter by month, supervisor, or type using the dropdowns.</li>
+      <li>Time off automatically updates the &quot;Out Today&quot; list on the Today tab and PTO pills on the Schedule grid.</li>
+    </ul>
+    <div class="hint">&#128161; Tip: Export JSON periodically as a backup. If someone clears their browser data, the local state is lost &mdash; but a saved JSON file will restore everything.</div>
+  </div>
+</section>
+
+</main>
+
+<!-- Modals -->
+<div class="modal-bg" id="agent-modal-bg" onclick="if(event.target===this)closeAgentModal()">
+  <div class="modal">
+    <h3 id="agent-modal-title">Add Agent</h3>
+    <label>Name</label>
+    <input id="am-name" type="text">
+    <label>Shift (e.g. 8:00-4:30)</label>
+    <input id="am-shift" type="text">
+    <label>Supervisor</label>
+    <select id="am-sup"></select>
+    <label>Work Days (Sun&ndash;Sat)</label>
+    <div class="day-select">
+      <label>Sun<input type="checkbox" class="am-day" data-day="0"></label>
+      <label>Mon<input type="checkbox" class="am-day" data-day="1"></label>
+      <label>Tue<input type="checkbox" class="am-day" data-day="2"></label>
+      <label>Wed<input type="checkbox" class="am-day" data-day="3"></label>
+      <label>Thu<input type="checkbox" class="am-day" data-day="4"></label>
+      <label>Fri<input type="checkbox" class="am-day" data-day="5"></label>
+      <label>Sat<input type="checkbox" class="am-day" data-day="6"></label>
+    </div>
+    <div class="actions">
+      <button onclick="closeAgentModal()">Cancel</button>
+      <button id="am-delete" class="danger" onclick="deleteAgent()" style="display:none;">Delete</button>
+      <button class="primary" onclick="saveAgent()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="timeoff-modal-bg" onclick="if(event.target===this)closeTimeOffModal()">
+  <div class="modal">
+    <h3 id="timeoff-modal-title">Add Time Off Request</h3>
+    <label>Agent</label>
+    <select id="to-agent"></select>
+    <label>Type</label>
+    <select id="to-type">
+      <option>Vacation</option>
+      <option>Jiffy</option>
+      <option>Half Jiffy</option>
+      <option>Parental</option>
+      <option>Unpaid</option>
+    </select>
+    <div class="row">
+      <div style="flex:1"><label>Start date</label><input id="to-start" type="date"></div>
+      <div style="flex:1"><label>End date</label><input id="to-end" type="date"></div>
+    </div>
+    <label>Days</label>
+    <input id="to-days" type="number" step="0.5" min="0">
+    <label>Status</label>
+    <select id="to-status"><option>Approved</option><option>Pending</option><option>Denied</option></select>
+    <div class="actions">
+      <button onclick="closeTimeOffModal()">Cancel</button>
+      <button id="to-delete" class="danger" onclick="deleteTimeOff()" style="display:none;">Delete</button>
+      <button class="primary" onclick="saveTimeOff()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
